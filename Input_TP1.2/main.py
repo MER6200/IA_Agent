@@ -48,5 +48,6 @@ if __name__ == "__main__":
             Admin2.stop()
             Prof2.stop()
             Prof1.stop()
+            Etudiant1.stop()
             break
     print("Agents finished")

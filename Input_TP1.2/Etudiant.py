@@ -11,38 +11,34 @@ import json
 class Etudiant(Agent):
 
 
-    class on_start(OneShotBehaviour):
+    class on_start(CyclicBehaviour):
         async def run(self):
-            print("Envoie de la note 1 - Module 1")
+
+
+            reception = await self.receive(timeout=10)
+            if reception:
+                if reception.get_metadata("ontology") == "Note" and reception.get_metadata("performative") == "inform":
+                    print("Je suis l'etudiant et j'ai recu mes notes.")
+                    print("Voici mes notes  : {}".format(reception.body) + ".\nMerci!")
+                    await self.agent.stop()
 
             #ajouter le destinataire du message 1
-            msg = Message(to="Admin_1@jabber.ig.umons.ac.be")
+            msg = Message(to="Admin_2@jabber.ig.umons.ac.be")
             #ajouter l'ontologie du message 1
-            msg.set_metadata("ontology", "Module1")
+            msg.set_metadata("ontology", "Note")
             #ajouter le performative du message 1
-            msg.set_metadata("performative", "inform")
+            msg.set_metadata("performative", "query")
             #ajouter le contenu du message 1
-            msg.body = "18"
-
-
-            await self.send(msg)
+            msg.body = "Demande note"
             time.sleep(5)
-            print("Envoie de la note 2 - Module 1")
+            await self.send(msg)
 
-            #ajouter le destinataire du message 2
-            message2 = Message(to="Admin_1@jabber.ig.umons.ac.be")
-            #ajouter l'ontologie du message 2
-            message2.set_metadata("ontology", "Module1")
-            #ajouter le performative du message 2
-            message2.set_metadata("performative", "inform")
-            #ajouter le contenu du message 1
-            message2.body = "17"
-            await self.send(message2)
+
 
 
 
     async def setup(self):
-        print("Demarrage de l'agent Prof_1")
+        print("Demarrage de l'agent Etudiant et je demande ma note")
         b = self.on_start()
         self.add_behaviour(b)
 

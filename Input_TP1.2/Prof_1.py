@@ -38,6 +38,7 @@ class Prof_1(Agent):
             #ajouter le contenu du message 1 
             message2.body = "17"
             await self.send(message2)
+            await self.agent.stop()
 
     
 
